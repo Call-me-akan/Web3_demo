@@ -1,0 +1,12 @@
+{
+'id': 472669, 
+'title': '韩国交易所于KOSPI 200期货上涨5%后启动KOSPI指数熔断机制', 
+'description': '<p>Odaily星球日报讯 韩国交易所于 KOSPI 200 期货上涨 5%后启动 KOSPI 指数熔断机制，程序化交易暂停 5 分钟。</p>', 
+'images': [], 'isImportant': True,
+'publishTimestamp': 1773812225000, 
+'tags': [], 
+'newsUrlType': 'news_url', 
+'newsUrl': '', 
+'isCollection': None,
+'isLike': None
+}

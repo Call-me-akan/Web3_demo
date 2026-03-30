@@ -1,0 +1,47 @@
+# version: '3.8'
+
+services:
+  # 1. 数据库服务 (带向量插件的 PostgreSQL)
+  db:
+    image: pgvector/pgvector:pg16  # 使用支持向量计算的 PG 版本
+    container_name: web3_db
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # 数据持久化，防止重启丢数据
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT}:5432"  # 把容器内的 5432 映射到宿主机的 5432
+    networks:
+      - web3_net
+  redis:
+    image : redis/redis-stack-server:latest
+    container_name: web3_redis
+    restart: always
+    ports:
+      - "${REDIS_PORT}:6379"
+    networks:
+      - web3_net
+  rabbitmq:
+    image: rabbitmq:3-management-alpine  # 带有可视化界面的轻量级版本
+    container_name: web3_rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"   # AMQP 通信端口，咱们的 Python 代码（aio-pika）通过这个端口连
+      - "15672:15672" # 可视化管理后台的 Web 端口
+    environment:
+      RABBITMQ_DEFAULT_USER: guest       # 默认账号
+      RABBITMQ_DEFAULT_PASS: guest       # 默认密码
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq  # 数据持久化挂载，防止重启后队列数据丢失
+volumes:
+  postgres_data:
+  rabbitmq_data:
+
+
+
+networks:
+  web3_net:
+    driver: bridge
